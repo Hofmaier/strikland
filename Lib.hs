@@ -16,8 +16,8 @@ data Rule = Rule [String] String
 showt :: Tree -> String
 showt t = "String representation of tree"
 
-w0 :: Tree
-w0 =  Node "W0" [ch, w1]
+tree :: Tree
+tree =  Node "W0" [ch, w1]
 
 ch = Node "CH" []
 w1 = Node "W1" []
@@ -46,3 +46,15 @@ tree2list (Node v children) = let
 
 tree2string :: Tree -> String
 tree2string (Node str children) = str
+
+resolveCodes :: Tree -> [String] -> String ->  Maybe Rule
+resolveCodes tree qdb codeToResolve = let
+  codeMap = tree2map tree
+  children = M.lookup codeToResolve codeMap
+  in createRule children codeToResolve
+
+createRule :: Maybe [String] -> String -> Maybe Rule
+createRule children target = fmap (str2Rule target) children
+
+str2Rule :: String -> [String] -> Rule
+str2Rule target childrenCodes = Rule childrenCodes target 
